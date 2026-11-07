@@ -24,7 +24,10 @@ The API listens on `http://localhost:8080`. Useful endpoints:
 | `POST` | `/api/expenses` | Create an expense |
 | `DELETE` | `/api/expenses/{id}` | Delete an expense |
 | `GET` | `/api/summary?month=2026-11` | Get a monthly total and category breakdown |
+| `POST` | `/api/expenses/import` | Import a PhonePe CSV, XLS, or XLSX statement (`file` multipart field) |
 | `GET` | `/actuator/health` | Health check |
+
+PhonePe's merchant APIs do not provide a supported way for this app to fetch a user's personal transaction history directly, so export a statement from PhonePe and upload the CSV or Excel file instead. The importer looks for date, details/description, and amount columns, skips credits and unsuccessful transactions, categorizes common merchants, and ignores transaction IDs already imported. Transactions without an ID cannot be deduplicated across separate uploads.
 
 Example request:
 

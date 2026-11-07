@@ -9,6 +9,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +18,13 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class ExpenseService {
     private final ExpenseRepository repository;
+    private final PhonePeStatementImportService statementImportService;
 
-    public ExpenseService(ExpenseRepository repository) {
+    public ExpenseService(
+            ExpenseRepository repository,
+            PhonePeStatementImportService statementImportService) {
         this.repository = repository;
+        this.statementImportService = statementImportService;
     }
 
     @Transactional(readOnly = true)
@@ -37,6 +42,10 @@ public class ExpenseService {
                 request.category(),
                 request.spentAt());
         return ExpenseResponse.from(repository.save(expense));
+    }
+
+    public ExpenseImportResponse importStatement(MultipartFile file) {
+        return statementImportService.importStatement(file);
     }
 
     @Transactional

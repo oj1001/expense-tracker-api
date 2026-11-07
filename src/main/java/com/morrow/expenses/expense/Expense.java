@@ -32,6 +32,9 @@ public class Expense {
     @Column(name = "spent_at", nullable = false)
     private Instant spentAt;
 
+    @Column(name = "external_transaction_id", unique = true, length = 120)
+    private String externalTransactionId;
+
     protected Expense() {
     }
 
@@ -40,10 +43,20 @@ public class Expense {
             BigDecimal amount,
             ExpenseCategory category,
             Instant spentAt) {
+        this(description, amount, category, spentAt, null);
+    }
+
+    public Expense(
+            String description,
+            BigDecimal amount,
+            ExpenseCategory category,
+            Instant spentAt,
+            String externalTransactionId) {
         this.description = description;
         this.amount = amount;
         this.category = category;
         this.spentAt = spentAt;
+        this.externalTransactionId = externalTransactionId;
     }
 
     public UUID getId() {
@@ -64,5 +77,9 @@ public class Expense {
 
     public Instant getSpentAt() {
         return spentAt;
+    }
+
+    public String getExternalTransactionId() {
+        return externalTransactionId;
     }
 }
